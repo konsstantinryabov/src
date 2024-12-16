@@ -4,6 +4,7 @@ from src import masks
 
 
 def mask_account_card(card_number: Union[str]) -> Union[str]:
+
     """
     Функция возвращает содержащую тип и номер карты или счет
     получает: "Visa Platinum 7000792289606361"
@@ -18,6 +19,7 @@ def mask_account_card(card_number: Union[str]) -> Union[str]:
 
 
 def get_date(time: Union[str]) -> Union[str]:
+
     """Функция возвращает преобразованную строку даты и времени в дату
     получает: "2024-03-11T02:26:18.671407"
     возвращает: "11.03.2024"
