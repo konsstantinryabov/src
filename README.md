@@ -16,6 +16,13 @@
 ## Использование
 На данном этапе разработки виджет ***src*** виджет имеет несколько модулей и выполняет следующие операции: 
 
+## Установка 
+- Скопировать - [SSH](git@github.com:konsstantinryabov/src.git)
+- В терминале поддерживающем команды гит введите 
+```
+git clone git@github.com:konsstantinryabov/src.git
+```
+
 ### Модуль ***masks.py***:
 ***get_mask_card_number()*** принимает на вход номер карты и возвращает ее маску
 
@@ -84,11 +91,96 @@ state соответствует указанному значению.
 {'id': 939719570, 'state': 'EXECUTED', 'date': '2018-06-30T02:08:58.425572'}]
 ```
 
+## Тестирование через
 
-### Установка 
-- Скопировать - [SSH](git@github.com:konsstantinryabov/src.git)
-- В терминале поддерживающем команды гит введите 
+### Параметризация
+Это запуск одного и того же теста с различными входными данными. Это позволяет проверить работу тестируемой функции в разных условиях и с разными наборами данных.
+
+Пример параметризации (обязательный декоратор ***@pytest.mark.parametrize***):
+
 ```
-git clone git@github.com:konsstantinryabov/src.git
+@pytest.mark.parametrize("card_number, expected", [
+    ("7000792289606361", "7000 79** **** 6361"),
+    ("7000 7922 8960 6361", "7000 79** **** 6361"),
+    ("5995 1248 3579 2541", "5995 12** **** 2541"),
+    ("5995 1248 3579", "59** **** 3579"),
+    ("15489653215487984461464", "Некорректный номер карты"),
+    (5995124835792541, "5995 12** **** 2541"),
+    ([], "0"),
+    ({}, "0"),
+    ("", "0"),])
 ```
-- Приятного ознакомления)
+
+
+
+
+Функция, которая проводит на истинность соответствия:
+```
+def test_get_mask_card_number(card_number: Union[int, str], expected: str) -> None:
+    assert get_mask_card_number(card_number) == expected
+```
+
+
+
+Пример результат тестирования после выполнения команды ***pytest***:
+```
+============================= test session starts =============================
+collecting ... collected 19 items
+
+test_masks.py::test_card_review_fixture PASSED                           [  5%]
+test_masks.py::test_get_mask_card_number[7000792289606361-7000 79** **** 6361] PASSED [ 10%]
+test_masks.py::test_get_mask_card_number[7000 7922 8960 6361-7000 79** **** 6361] PASSED [ 15%]
+test_masks.py::test_get_mask_card_number[5995 1248 3579 2541-5995 12** **** 2541] PASSED [ 21%]
+test_masks.py::test_get_mask_card_number[5995 1248 3579-59** **** 3579] PASSED [ 26%]
+test_masks.py::test_get_mask_card_number[15489653215487984461464-\u041d\u0435\u043a\u043e\u0440\u0440\u0435\u043a\u0442\u043d\u044b\u0439 \u043d\u043e\u043c\u0435\u0440 \u043a\u0430\u0440\u0442\u044b] PASSED [ 31%]
+test_masks.py::test_get_mask_card_number[5995124835792541-5995 12** **** 2541] PASSED [ 36%]
+test_masks.py::test_get_mask_card_number[card_number6-0] PASSED          [ 42%]
+test_masks.py::test_get_mask_card_number[card_number7-0] PASSED          [ 47%]
+test_masks.py::test_get_mask_card_number[-0] PASSED                      [ 52%]
+test_masks.py::test_get_mask_account[73654108430135874305-**4305_0] PASSED [ 57%]
+test_masks.py::test_get_mask_account[7365 4108 4301 3587 4305-**4305] PASSED [ 63%]
+test_masks.py::test_get_mask_account[5995 1248 3579 2541 7896-**7896] PASSED [ 68%]
+test_masks.py::test_get_mask_account[7365410843013587430-**7430] PASSED  [ 73%]
+test_masks.py::test_get_mask_account[15489653215487984461401464-\u041d\u0435\u043a\u043e\u0440\u0440\u0435\u043a\u0442\u043d\u044b\u0439 \u043d\u043e\u043c\u0435\u0440 \u0441\u0447\u0435\u0442\u0430] PASSED [ 78%]
+test_masks.py::test_get_mask_account[73654108430135874305-**4305_1] PASSED [ 84%]
+test_masks.py::test_get_mask_account[card_number6-0] PASSED              [ 89%]
+test_masks.py::test_get_mask_account[card_number7-0] PASSED              [ 94%]
+test_masks.py::test_get_mask_account[-0] PASSED                          [100%]
+
+============================= 19 passed in 0.07s ==============================
+
+Process finished with exit code 0
+```
+
+### Фикстуры
+Это специальные функции, которые запускаются до или после тестов.
+
+Пример фикстур:
+```
+@pytest.fixture
+def card_name_review() -> str:
+    return "Maestro"
+
+@pytest.fixture
+def card_number_review() -> str:
+    return "1596837868705199"
+
+```
+Пример функций вызова фикстур:
+
+```
+def test_mask_account_card_fixture(card_name_review: str, card_number_review: str) -> None:
+    assert mask_account_card(card_name_review, card_number_review) == "Maestro 1596 83** **** 5199"
+
+```
+Пример результата выполнения проверки:
+```
+============================= test session starts =============================
+collecting ... collected 1 item
+
+test_widget.py::test_mask_account_card_fixture PASSED                    [100%]
+
+============================== 1 passed in 0.04s ==============================
+
+Process finished with exit code 0
+```
