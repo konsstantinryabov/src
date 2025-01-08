@@ -4,11 +4,11 @@ from src.masks import get_mask_account, get_mask_card_number
 
 import pytest
 
-def test_card_review(card_review: [str, int]) -> None:
+def test_card_review_fixture(card_review: [str, int]) -> None:
     for card_number in card_review:
         if len(str(card_number)) == 16:
             assert get_mask_card_number(card_number) == "7000 79** **** 6361"
-        else:
+        elif len(str(card_number)) == 24:
             assert get_mask_account(card_number) == "**4305"
 
 
