@@ -1,14 +1,13 @@
-from typing import Generator
+from typing import Generator, Iterator
 
 
-def filter_by_currency(transactions: list, currency_code: str) -> Generator:
+def filter_by_currency(transactions: list, currency_code: str) -> Iterator[dict]:
     """
     Функция принимает на вход список транзаций и возвращает итератор
     транзации с заднным 'code' равный 'currency_code'
     """
-    result = (i for i in transactions if i["operationAmount"]["currency"]["code"] == currency_code)
-    yield list(result)
-
+    result = list(filter(lambda x: x["operationAmount"]["currency"]["code"] == currency_code, transactions))
+    yield result
 
 def transaction_descriptions(transactions: list) -> Generator:
     """
