@@ -6,8 +6,8 @@ def filter_by_currency(transactions: list, currency_code: str) -> Iterator[dict]
     Функция принимает на вход список транзаций и возвращает итератор
     транзации с заднным 'code' равный 'currency_code'
     """
-    result = list(filter(lambda x: x["operationAmount"]["currency"]["code"] == currency_code, transactions))
-    yield result
+    return filter(lambda x: x["operationAmount"]["currency"]["code"] == currency_code, transactions)
+
 
 def transaction_descriptions(transactions: list) -> Generator:
     """

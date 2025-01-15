@@ -4,8 +4,8 @@ from tests.conftest import result_one, result_two
 import pytest
 
 def test_filter_by_currency_fixture(filter_by_currency_review: list) -> None:
-    assert next(filter_by_currency(filter_by_currency_review, "USD")) == result_one
-    assert next(filter_by_currency(filter_by_currency_review, "RUB")) == result_two
+    assert next(filter_by_currency(filter_by_currency_review, "USD")) == result_one[0]
+    assert next(filter_by_currency(filter_by_currency_review, "RUB")) == result_two[0]
 
 
 def test_transaction_descriptions_fixture(transaction_descriptions_review: Generator) -> None:
