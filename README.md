@@ -201,12 +201,54 @@ state соответствует указанному значению.
 "0000 0000 0000 0004",
 "0000 0000 0000 0005"
  ```
+### Модуль ***decorators.py***:
+***log():*** декоратор автоматически логирует "в файл log.txt"
+начало и конец выполнения функции, а также ее результаты или
+возникшие ошибки. Принимает на вход файл "log.txt"
+
+#### Пример записи в файл:
+```
+# Пример использования:
+@log(filename="log.txt")
+def my_function(x, y):
+    return x + y
+
+# Пример 1:
+my_function(20, 40)
+# Запишет в файл:
+my_function ok
+
+# Пример 2:
+my_function(20, "")
+# Запишет в файл:
+my_function error: unsupported operand type(s) for +: 'int' and 'str'. Inputs: (20, 'hello'), {}
+```
+
+#### Пример вывода в консоль:
+```
+# Пример использования:
+@log(filename="")
+def my_function(x, y):
+    return x + y
+    
+# Пример 1:
+my_function(20, 40)
+# Выведет в консоль:
+my_function ok
 
 
-## Тестирование через
+# Пример 2:
+my_function(20, "hello")
+# Выведет в консоль:
+my_function error: unsupported operand type(s) for +: 'int' and 'str'. Inputs: (20, 'hello'), {}
+```
+
+## Тестирование
 
 ### Параметризация
-Это запуск одного и того же теста с различными входными данными. Это позволяет проверить работу тестируемой функции в разных условиях и с разными наборами данных.
+Это запуск одного и того же теста с различными входными данными.
+Это позволяет проверить работу тестируемой функции в разных
+условиях и с разными наборами данных.
 
 Пример параметризации (обязательный декоратор ***@pytest.mark.parametrize***):
 
@@ -322,3 +364,9 @@ Process finished with exit code 0
 - **test_mask_account_card()** с параметризацией
 - **test_get_date()** с параметризацией
 
+
+### Модуль ***test_widget.py***:
+- **test_log_decorator_error_write_loc()** 
+- **test_log_decorator_successfully_write_loc()**
+- **test_log_decorator_error_write_console()**
+- **test_log_decorator_successfully_write_console()** 

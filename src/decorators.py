@@ -23,12 +23,7 @@ def log(filename):
                     file.write(f"{func.__name__} ok\n")
                     file.close()
                 return rezult
+
         return wrapper
+
     return decorator
-
-
-# @log(filename="log.txt")
-# def my_function(x, y):
-#     return x + y
-#
-# my_function(20, "hello")
